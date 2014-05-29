@@ -283,15 +283,17 @@ hello.utils.extend( hello, {
 			redirect_uri : opts.redirect_uri,
 			display		: opts.display,
 			scope		: 'basic',
-			state		: {
+			state		: hello.utils.extend({
 				client_id	: provider.id,
 				network		: p.network,
 				display		: opts.display,
 				callback	: callback_id,
-				state		: opts.state,
 				oauth_proxy : opts.oauth_proxy
-			}
+			}, opts.state || {} )
 		};
+
+    //allow login to add additional parameters
+    p.qs = hello.utils.extend(p.qs, opts.params || {});
 
 		//
 		// SESSION
@@ -3357,6 +3359,10 @@ hello.init({
 			auth : 'https://github.com/login/oauth/authorize',
 			grant : 'https://github.com/login/oauth/access_token'
 		},
+		scope : {
+			basic           : '',
+			email           : 'user:email'
+		},
 		base : 'https://api.github.com/',
 		get : {
 			'me' : 'user',
@@ -3390,6 +3396,7 @@ hello.init({
 });
 
 })(hello);
+
 //
 // GOOGLE API
 //
